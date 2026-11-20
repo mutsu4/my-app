@@ -1,11 +1,20 @@
 import Link from "next/link";
 
 type Product = {
-    id: number;
-    name: string;
-    price: number;
+    id: string;
+    title: string;
+    handle: string;
     description: string;
-    image: string;
+    priceRange: {
+        minVariantPrice: {
+            amount: string;
+            currencyCode: string;
+        };
+    };
+    featuredImage: {
+        url: string;
+        altText: string | null;
+    } | null;
 };
 
 type ProductCardProps ={
@@ -17,15 +26,15 @@ export default function ProductCard({ product }: ProductCardProps) {
         <article className="overflow-hidden">
             <div className="h-52 overflow-hidden">
                 <img
-                    src={product.image}
-                    alt={product.name} 
+                    src={product.featuredImage?.url}
+                    alt={product.featuredImage?.altText || product.title}
                     className="h-full w-full" 
                 />
             </div>
 
             <div className="p-6">
                 <h2>                
-                    {product.name}
+                    {product.title}
                 </h2>
 
             <p className="mt-4">
@@ -33,10 +42,10 @@ export default function ProductCard({ product }: ProductCardProps) {
             </p>
 
             <p className="mt-4">
-                ¥{product.price.toLocaleString()}
+                ¥{Number(product.priceRange.minVariantPrice.amount).toLocaleString()} {product.priceRange.minVariantPrice.currencyCode}
             </p>
 
-            <Link href={`/products/${product.id}`} className=" rounded-lg bg-stone-800 px-10 py-3 text-white"　>
+            <Link href={`/products/${product.handle}`} className=" rounded-lg bg-stone-800 px-10 py-3 text-white" >
               商品詳細  
             </Link>
             </div>
